@@ -1,7 +1,6 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
-import time
 
 mobile_emulation = {
    "deviceMetrics": { "width": 360, "height": 640, "pixelRatio": 3.0 },
@@ -29,8 +28,8 @@ for year in range(START_YEAR, END_YEAR + 1):
             for attribute in book_details:
                 if str(year) in attribute.text:
                     book['date'] = attribute.text
-            books.append(book)
-
-            # driver.execute_script("window.history.go(-1)")
-            time.sleep(1)
+                    books.append(book)
+                    print(book)
+                    driver.execute_script("window.history.go(-1)")
+                    break
 print(books)
