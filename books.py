@@ -15,8 +15,13 @@ books = []
 for year in range(START_YEAR, END_YEAR + 1):
     for month in range(1, 13):
         driver.get(f'https://www.amazon.com/s?i=stripbooks&rh=n%3A5%2Cp_n_condition-type%3A1294423011%2Cp_20%3AEnglish&s=date-desc-rank&Adv-Srch-Books-Submit.x=24&Adv-Srch-Books-Submit.y=12&field-datemod={month}&field-dateop=During&field-dateyear={year}&qid=1623224173&unfiltered=1&ref=aa_sbox_sort')
-        items = driver.find_elements(By.XPATH, '//div[@class="s-card-container s-overflow-hidden s-include-content-margin s-latency-cf-section s-card-border"]')
-        for item in items:
+        driver.implicitly_wait(1)
+
+        counter = 0
+        page_scraped = False
+        while not page_scraped:
+            item = driver.find_elements(By.XPATH, '//div[@class="s-card-container s-overflow-hidden s-include-content-margin s-latency-cf-section s-card-border"]')[counter]
+
             book = {}
             book['title'] = item.find_element(By.XPATH, './/span[@class="a-size-small a-color-base a-text-normal"]').text
             book['author'] = item.find_elements(By.XPATH, './/span[@class="a-size-mini s-light-weight-text"]')[1].text
@@ -32,4 +37,8 @@ for year in range(START_YEAR, END_YEAR + 1):
                     print(book)
                     driver.execute_script("window.history.go(-1)")
                     break
+
+            if counter + 1 == len(driver.find_elements(By.XPATH, '//div[@class="s-card-container s-overflow-hidden s-include-content-margin s-latency-cf-section s-card-border"]')):
+                page_scraped = True
+            counter += 1
 print(books)
