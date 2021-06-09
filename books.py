@@ -1,6 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
+import time
 
 mobile_emulation = {
    "deviceMetrics": { "width": 360, "height": 640, "pixelRatio": 3.0 },
@@ -22,4 +23,14 @@ for year in range(START_YEAR, END_YEAR + 1):
             book['author'] = item.find_elements(By.XPATH, './/span[@class="a-size-mini s-light-weight-text"]')[1].text
             book['format'] = item.find_element(By.XPATH, './/span[@class="a-size-mini a-color-base s-medium-weight-text a-text-bold"]').text
             books.append(book)
+
+            item.find_element(By.XPATH, './/span[@class="a-size-small a-color-base a-text-normal"]').click()
+            book_details = driver.find_elements(By.XPATH, '//div[@class="a-section a-spacing-none a-text-center rpi-attribute-value rpi-iconic-attribute-text"]/span')
+            for attribute in book_details:
+                if str(year) in attribute.text:
+                    book['date'] = attribute.text
+            books.append(book)
+
+            # driver.execute_script("window.history.go(-1)")
+            time.sleep(1)
 print(books)
