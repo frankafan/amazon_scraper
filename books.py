@@ -9,6 +9,7 @@ chrome_options = Options()
 chrome_options.add_experimental_option("mobileEmulation", mobile_emulation)
 driver = webdriver.Chrome('chromedriver.exe', options=chrome_options)
 
+SCRAPE_DATE = False
 START_YEAR = 2017
 END_YEAR = 2021
 books = []
@@ -26,22 +27,22 @@ for year in range(START_YEAR, END_YEAR + 1):
             book['title'] = item.find_element(By.XPATH, './/span[@class="a-size-small a-color-base a-text-normal"]').text
             book['author'] = item.find_elements(By.XPATH, './/span[@class="a-size-mini s-light-weight-text"]')[1].text
             book['format'] = item.find_element(By.XPATH, './/span[@class="a-size-mini a-color-base s-medium-weight-text a-text-bold"]').text
-            books.append(book)
 
-            item.find_element(By.XPATH, './/span[@class="a-size-small a-color-base a-text-normal"]').click()
+            if SCRAPE_DATE:
+                item.find_element(By.XPATH, './/span[@class="a-size-small a-color-base a-text-normal"]').click()
 
-            book_details = driver.find_elements(By.XPATH, '//div[@class="a-section a-spacing-none a-text-center rpi-attribute-value rpi-iconic-attribute-text"]/span')
-            if len(book_details) != 0:
-                for attribute in book_details:
-                    if str(year) in attribute.text:
-                        book['date'] = attribute.text
-                        print(book)
-                        driver.execute_script("window.history.go(-1)")
-                        break
-            else:
-                book['date'] = f'{month}, {year}'
-                print(book)
-                driver.execute_script("window.history.go(-1)")
+                book_details = driver.find_elements(By.XPATH, '//div[@class="a-section a-spacing-none a-text-center rpi-attribute-value rpi-iconic-attribute-text"]/span')
+                if len(book_details) != 0:
+                    for attribute in book_details:
+                        if str(year) in attribute.text:
+                            book['date'] = attribute.text
+                            print(book)
+                            driver.execute_script("window.history.go(-1)")
+                            break
+                else:
+                    book['date'] = f'{month}, {year}'
+                    print(book)
+                    driver.execute_script("window.history.go(-1)")
             books.append(book)
 
             if counter + 1 == len(driver.find_elements(By.XPATH, '//div[@class="s-card-container s-overflow-hidden s-include-content-margin s-latency-cf-section s-card-border"]')):
