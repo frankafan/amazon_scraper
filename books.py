@@ -29,14 +29,20 @@ for year in range(START_YEAR, END_YEAR + 1):
             books.append(book)
 
             item.find_element(By.XPATH, './/span[@class="a-size-small a-color-base a-text-normal"]').click()
+
             book_details = driver.find_elements(By.XPATH, '//div[@class="a-section a-spacing-none a-text-center rpi-attribute-value rpi-iconic-attribute-text"]/span')
-            for attribute in book_details:
-                if str(year) in attribute.text:
-                    book['date'] = attribute.text
-                    books.append(book)
-                    print(book)
-                    driver.execute_script("window.history.go(-1)")
-                    break
+            if len(book_details) != 0:
+                for attribute in book_details:
+                    if str(year) in attribute.text:
+                        book['date'] = attribute.text
+                        print(book)
+                        driver.execute_script("window.history.go(-1)")
+                        break
+            else:
+                book['date'] = f'{month}, {year}'
+                print(book)
+                driver.execute_script("window.history.go(-1)")
+            books.append(book)
 
             if counter + 1 == len(driver.find_elements(By.XPATH, '//div[@class="s-card-container s-overflow-hidden s-include-content-margin s-latency-cf-section s-card-border"]')):
                 page_scraped = True
