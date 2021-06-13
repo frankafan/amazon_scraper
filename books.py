@@ -66,10 +66,10 @@ for year in range(START_YEAR, END_YEAR + 1):
                         f'https://www.amazon.com/s?i=stripbooks&rh=n%3A5%2Cp_n_condition-type%3A1294423011%2Cp_20%3AEnglish&s=date-desc-rank&page={page_num}&Adv-Srch-Books-Submit.x=24&Adv-Srch-Books-Submit.y=12&field-datemod={month}&field-dateop=During&field-dateyear={year}&qid=1623224173&unfiltered=1&ref=aa_sbox_sort')
                     if 'Try checking your spelling or use more general terms' in driver.page_source:
                         page_end = True
-                with open(f'{year}-{month}.txt', 'w') as outfile:
-                    json.dump(books, outfile)
             except:
                 print('Error')
                 continue
             else:
+                with open(f'{year}-{month}.txt', 'w') as outfile:
+                    json.dump(books, outfile)
                 break
