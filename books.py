@@ -15,37 +15,47 @@ END_YEAR = 2021
 books = []
 for year in range(START_YEAR, END_YEAR + 1):
     for month in range(1, 13):
-        driver.get(f'https://www.amazon.com/s?i=stripbooks&rh=n%3A5%2Cp_n_condition-type%3A1294423011%2Cp_20%3AEnglish&s=date-desc-rank&Adv-Srch-Books-Submit.x=24&Adv-Srch-Books-Submit.y=12&field-datemod={month}&field-dateop=During&field-dateyear={year}&qid=1623224173&unfiltered=1&ref=aa_sbox_sort')
-        driver.implicitly_wait(1)
+        page_num = 85
+        page_end = False
+        while not page_end:
+            driver.get(f'https://www.amazon.com/s?i=stripbooks&rh=n%3A5%2Cp_n_condition-type%3A1294423011%2Cp_20%3AEnglish&s=date-desc-rank&page={page_num}&Adv-Srch-Books-Submit.x=24&Adv-Srch-Books-Submit.y=12&field-datemod={month}&field-dateop=During&field-dateyear={year}&qid=1623224173&unfiltered=1&ref=aa_sbox_sort')
+            driver.implicitly_wait(1)
 
-        counter = 0
-        page_scraped = False
-        while not page_scraped:
-            item = driver.find_elements(By.XPATH, '//div[@class="s-card-container s-overflow-hidden s-include-content-margin s-latency-cf-section s-card-border"]')[counter]
+            item_index = 0
+            page_scraped = False
+            while not page_scraped:
+                item = driver.find_elements(By.XPATH, '//div[@class="s-card-container s-overflow-hidden s-include-content-margin s-latency-cf-section s-card-border"]')[item_index]
 
-            book = {}
-            book['title'] = item.find_element(By.XPATH, './/span[@class="a-size-small a-color-base a-text-normal"]').text
-            book['author'] = item.find_elements(By.XPATH, './/span[@class="a-size-mini s-light-weight-text"]')[1].text
-            book['format'] = item.find_element(By.XPATH, './/span[@class="a-size-mini a-color-base s-medium-weight-text a-text-bold"]').text
+                book = {}
+                book['title'] = item.find_element(By.XPATH, './/span[@class="a-size-small a-color-base a-text-normal"]').text
+                book['author'] = item.find_elements(By.XPATH, './/span[@class="a-size-mini s-light-weight-text"]')[1].text
+                book['format'] = item.find_element(By.XPATH, './/span[@class="a-size-mini a-color-base s-medium-weight-text a-text-bold"]').text
+                book['year'] = year
+                book['month'] = month
 
-            if SCRAPE_DATE:
-                item.find_element(By.XPATH, './/span[@class="a-size-small a-color-base a-text-normal"]').click()
+                if SCRAPE_DATE:
+                    item.find_element(By.XPATH, './/span[@class="a-size-small a-color-base a-text-normal"]').click()
 
-                book_details = driver.find_elements(By.XPATH, '//div[@class="a-section a-spacing-none a-text-center rpi-attribute-value rpi-iconic-attribute-text"]/span')
-                if len(book_details) != 0:
-                    for attribute in book_details:
-                        if str(year) in attribute.text:
-                            book['date'] = attribute.text
-                            print(book)
-                            driver.execute_script("window.history.go(-1)")
-                            break
-                else:
-                    book['date'] = f'{month}, {year}'
-                    print(book)
-                    driver.execute_script("window.history.go(-1)")
-            books.append(book)
+                    book_details = driver.find_elements(By.XPATH, '//div[@class="a-section a-spacing-none a-text-center rpi-attribute-value rpi-iconic-attribute-text"]/span')
+                    if len(book_details) != 0:
+                        for attribute in book_details:
+                            if str(year) in attribute.text:
+                                book['date'] = attribute.text
+                                driver.execute_script("window.history.go(-1)")
+                                break
+                    else:
+                        book['date'] = f'{month}, {year}'
+                        driver.execute_script("window.history.go(-1)")
+                print(book)
+                books.append(book)
 
-            if counter + 1 == len(driver.find_elements(By.XPATH, '//div[@class="s-card-container s-overflow-hidden s-include-content-margin s-latency-cf-section s-card-border"]')):
-                page_scraped = True
-            counter += 1
+                item_index += 1
+
+                if item_index == len(driver.find_elements(By.XPATH, '//div[@class="s-card-container s-overflow-hidden s-include-content-margin s-latency-cf-section s-card-border"]')):
+                    page_scraped = True
+            page_num += 1
+            driver.get(
+                f'https://www.amazon.com/s?i=stripbooks&rh=n%3A5%2Cp_n_condition-type%3A1294423011%2Cp_20%3AEnglish&s=date-desc-rank&page={page_num}&Adv-Srch-Books-Submit.x=24&Adv-Srch-Books-Submit.y=12&field-datemod={month}&field-dateop=During&field-dateyear={year}&qid=1623224173&unfiltered=1&ref=aa_sbox_sort')
+            if 'Try checking your spelling or use more general terms' in driver.page_source:
+                page_end = True
 print(books)
