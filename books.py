@@ -34,7 +34,7 @@ for year in range(START_YEAR, END_YEAR + 1):
 
                         book = {}
                         book['title'] = item.find_element(By.XPATH, './/span[@class="a-size-small a-color-base a-text-normal"]').text
-                        if len(item.find_elements(By.XPATH, './/span[@class="a-size-mini s-light-weight-text"]')) > 0:
+                        if len(item.find_elements(By.XPATH, './/span[@class="a-size-mini s-light-weight-text"]')) > 1:
                             book['author'] = item.find_elements(By.XPATH, './/span[@class="a-size-mini s-light-weight-text"]')[1].text
                         if len(item.find_elements(By.XPATH, './/span[@class="a-size-mini a-color-base s-medium-weight-text a-text-bold"]')) > 0:
                             book['format'] = item.find_element(By.XPATH, './/span[@class="a-size-mini a-color-base s-medium-weight-text a-text-bold"]').text
