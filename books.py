@@ -67,6 +67,7 @@ for year in range(START_YEAR, END_YEAR + 1):
                 with open(f'{year}-{month}.txt', 'w') as outfile:
                     json.dump(books, outfile)
             except:
+                print('Error')
                 continue
             else:
                 break
