@@ -17,7 +17,7 @@ for year in range(START_YEAR, END_YEAR + 1):
     for month in range(1, 13):
         print(f'Year: {year}')
         print(f'Month: {month}')
-        while True:
+        for i in range(5):
             try:
                 books = []
                 page_num = 1
