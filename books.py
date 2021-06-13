@@ -1,6 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
+import json
 
 mobile_emulation = {
    "deviceMetrics": { "width": 360, "height": 640, "pixelRatio": 3.0 },
@@ -15,7 +16,7 @@ END_YEAR = 2021
 books = []
 for year in range(START_YEAR, END_YEAR + 1):
     for month in range(1, 13):
-        page_num = 85
+        page_num = 1
         page_end = False
         while not page_end:
             driver.get(f'https://www.amazon.com/s?i=stripbooks&rh=n%3A5%2Cp_n_condition-type%3A1294423011%2Cp_20%3AEnglish&s=date-desc-rank&page={page_num}&Adv-Srch-Books-Submit.x=24&Adv-Srch-Books-Submit.y=12&field-datemod={month}&field-dateop=During&field-dateyear={year}&qid=1623224173&unfiltered=1&ref=aa_sbox_sort')
@@ -58,4 +59,5 @@ for year in range(START_YEAR, END_YEAR + 1):
                 f'https://www.amazon.com/s?i=stripbooks&rh=n%3A5%2Cp_n_condition-type%3A1294423011%2Cp_20%3AEnglish&s=date-desc-rank&page={page_num}&Adv-Srch-Books-Submit.x=24&Adv-Srch-Books-Submit.y=12&field-datemod={month}&field-dateop=During&field-dateyear={year}&qid=1623224173&unfiltered=1&ref=aa_sbox_sort')
             if 'Try checking your spelling or use more general terms' in driver.page_source:
                 page_end = True
-print(books)
+with open('data.txt', 'w') as outfile:
+    json.dump(books, outfile)
