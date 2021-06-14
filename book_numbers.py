@@ -19,12 +19,13 @@ data = []
 
 START_YEAR = 2017
 END_YEAR = 2021
+CURRENT_DATE = '2021-06'
 for year in range(START_YEAR, END_YEAR + 1):
     for month in range(1, 13):
         print(f'Year: {year}')
         print(f'Month: {month}')
 
-        while True:
+        while int(CURRENT_DATE.split('-')[0]) >= year and int(CURRENT_DATE.split('-')[1]) >= month:
             try:
                 month_data = {}
                 while not month_data:
