@@ -22,33 +22,40 @@ for year in range(START_YEAR, END_YEAR + 1):
         print(f'Year: {year}')
         print(f'Month: {month}')
 
-        month_data = {}
-        while not month_data:
-            driver.get(
-                f'https://www.amazon.com/s?i=stripbooks&rh=n%3A5%2Cp_n_condition-type%3A1294423011%2Cp_20%3AEnglish&s=date-desc-rank&Adv-Srch-Books-Submit.x=24&Adv-Srch-Books-Submit.y=12&field-datemod={month}&field-dateop=During&field-dateyear={year}&qid=1623224173&unfiltered=1&ref=aa_sbox_sort')
-            elements = find_filter_items(driver)
-            for i in range(len(elements)):
-                if elements[i].text == 'Filters':
-                    elements[i].click()
+        while True:
+            try:
+                month_data = {}
+                while not month_data:
+                    driver.get(
+                        f'https://www.amazon.com/s?i=stripbooks&rh=n%3A5%2Cp_n_condition-type%3A1294423011%2Cp_20%3AEnglish&s=date-desc-rank&Adv-Srch-Books-Submit.x=24&Adv-Srch-Books-Submit.y=12&field-datemod={month}&field-dateop=During&field-dateyear={year}&qid=1623224173&unfiltered=1&ref=aa_sbox_sort')
                     elements = find_filter_items(driver)
-                    break
-            for i in range(len(elements)):
-                if elements[i].text.split(' ')[0] == 'Show':
-                    month_data['result1'] = elements[i].text.split(' ')[1]
-                    elements = find_filter_items(driver)
-                    break
-            for i in range(len(elements)):
-                if elements[i].text == 'English':
-                    # driver.execute_script("arguments[0].scrollIntoView();", elements[i])
-                    driver.execute_script("arguments[0].scrollIntoView();", driver.find_elements(By.XPATH, './/span[@class="a-size-medium a-color-base"]')[-5])
-                    elements[i].click()
-                    elements = find_filter_items(driver)
-                    break
-            for i in range(len(elements)):
-                if elements[i].text.split(' ')[0] == 'Show':
-                    month_data['result2'] = elements[i].text.split(' ')[1]
-                    elements = find_filter_items(driver)
-                    break
-        data.append(month_data)
-        print(month_data)
+                    for i in range(len(elements)):
+                        if elements[i].text == 'Filters':
+                            elements[i].click()
+                            elements = find_filter_items(driver)
+                            break
+                    for i in range(len(elements)):
+                        if elements[i].text.split(' ')[0] == 'Show':
+                            month_data['result1'] = elements[i].text.split(' ')[1]
+                            elements = find_filter_items(driver)
+                            break
+                    for i in range(len(elements)):
+                        if elements[i].text == 'English':
+                            # driver.execute_script("arguments[0].scrollIntoView();", elements[i])
+                            driver.execute_script("arguments[0].scrollIntoView();", driver.find_elements(By.XPATH, './/span[@class="a-size-medium a-color-base"]')[-5])
+                            elements[i].click()
+                            elements = find_filter_items(driver)
+                            break
+                    for i in range(len(elements)):
+                        if elements[i].text.split(' ')[0] == 'Show':
+                            month_data['result2'] = elements[i].text.split(' ')[1]
+                            elements = find_filter_items(driver)
+                            break
+                data.append(month_data)
+            except:
+                print('Error')
+                continue
+            else:
+                print(month_data)
+                break
 print(data)
