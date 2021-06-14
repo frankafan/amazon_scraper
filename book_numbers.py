@@ -26,5 +26,17 @@ while not month_data:
             month_data['result1'] = elements[i].text.split(' ')[1]
             elements = driver.find_elements(By.XPATH, './/span[@class="a-size-small a-color-base"]')
             break
+    for i in range(len(elements)):
+        if elements[i].text == 'English':
+            # driver.execute_script("arguments[0].scrollIntoView();", elements[i])
+            driver.execute_script("arguments[0].scrollIntoView();", driver.find_elements(By.XPATH, './/span[@class="a-size-medium a-color-base"]')[-5])
+            elements[i].click()
+            elements = driver.find_elements(By.XPATH, './/span[@class="a-size-small a-color-base"]')
+            break
+    for i in range(len(elements)):
+        if elements[i].text.split(' ')[0] == 'Show':
+            month_data['result2'] = elements[i].text.split(' ')[1]
+            elements = driver.find_elements(By.XPATH, './/span[@class="a-size-small a-color-base"]')
+            break
 data.append(month_data)
 print(data)
