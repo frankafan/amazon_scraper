@@ -15,10 +15,17 @@ def find_filter_items(driver=driver):
     return driver.find_elements(By.XPATH, './/span[@class="a-size-small a-color-base"]')
 
 
-def find_num_results(elements, driver=driver):
+def find_num_results(elements):
     for i in range(len(elements)):
         if elements[i].text.split(' ')[0] == 'Show':
             return elements[i].text.split(' ')[1]
+
+
+def click_filter_button(elements):
+    for i in range(len(elements)):
+        if elements[i].text == 'Filters':
+            elements[i].click()
+            elements = find_filter_items(driver)
 
 
 data = []
@@ -38,11 +45,7 @@ for year in range(START_YEAR, END_YEAR + 1):
                     driver.get(
                         f'https://www.amazon.com/s?i=stripbooks&rh=n%3A5%2Cp_n_condition-type%3A1294423011%2Cp_20%3AEnglish&s=date-desc-rank&Adv-Srch-Books-Submit.x=24&Adv-Srch-Books-Submit.y=12&field-datemod={month}&field-dateop=During&field-dateyear={year}&qid=1623224173&unfiltered=1&ref=aa_sbox_sort')
                     elements = find_filter_items(driver)
-                    for i in range(len(elements)):
-                        if elements[i].text == 'Filters':
-                            elements[i].click()
-                            elements = find_filter_items(driver)
-                            break
+                    click_filter_button(elements)
                     elements = find_filter_items(driver)
                     month_data['result1'] = find_num_results(elements)
                     elements = find_filter_items(driver)
@@ -53,15 +56,17 @@ for year in range(START_YEAR, END_YEAR + 1):
                                                                                                          './/span[@class="a-size-medium a-color-base"]')[
                                 -5])
                             elements[i].click()
+                            driver.refresh()
                             elements = find_filter_items(driver)
                             break
                     elements = find_filter_items(driver)
+                    click_filter_button(elements)
                     month_data['result2'] = find_num_results(elements)
                 month_data['year'] = year
                 month_data['month'] = month
                 data.append(month_data)
-            except:
-                print('Error')
+            except Exception as e:
+                print(e)
                 continue
             else:
                 print(month_data)
