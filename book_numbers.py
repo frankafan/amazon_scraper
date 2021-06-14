@@ -51,6 +51,8 @@ for year in range(START_YEAR, END_YEAR + 1):
                             month_data['result2'] = elements[i].text.split(' ')[1]
                             elements = find_filter_items(driver)
                             break
+                month_data['year'] = year
+                month_data['month'] = month
                 data.append(month_data)
             except:
                 print('Error')
