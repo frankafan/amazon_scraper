@@ -9,23 +9,22 @@ chrome_options = Options()
 chrome_options.add_experimental_option("mobileEmulation", mobile_emulation)
 driver = webdriver.Chrome('chromedriver.exe', options=chrome_options)
 
-
-driver.get('https://www.amazon.com/s?i=stripbooks&rh=n%3A5%2Cp_n_condition-type%3A1294423011%2Cp_20%3AEnglish&s=daterank&Adv-Srch-Books-Submit.x=19&Adv-Srch-Books-Submit.y=18&field-datemod=3&field-dateop=During&field-dateyear=2021&unfiltered=1&ref=sr_adv_b')
-
 data = []
 
-elements = driver.find_elements(By.XPATH, './/span[@class="a-size-small a-color-base"]')
-for i in range(len(elements)):
-    if elements[i].text == 'Filters':
-        driver.implicitly_wait(1)
-        elements[i].click()
-        elements = driver.find_elements(By.XPATH, './/span[@class="a-size-small a-color-base"]')
-        break
-for i in range(len(elements)):
-    if elements[i].text.split(' ')[0] == 'Show':
-        data.append({
-            'results1': elements[i].text.split(' ')[1],
-        })
-        print(driver.page_source)
-        break
+month_data = {}
+while not month_data:
+    driver.get(
+        'https://www.amazon.com/s?i=stripbooks&rh=n%3A5%2Cp_n_condition-type%3A1294423011%2Cp_20%3AEnglish&s=daterank&Adv-Srch-Books-Submit.x=19&Adv-Srch-Books-Submit.y=18&field-datemod=3&field-dateop=During&field-dateyear=2021&unfiltered=1&ref=sr_adv_b')
+    elements = driver.find_elements(By.XPATH, './/span[@class="a-size-small a-color-base"]')
+    for i in range(len(elements)):
+        if elements[i].text == 'Filters':
+            elements[i].click()
+            elements = driver.find_elements(By.XPATH, './/span[@class="a-size-small a-color-base"]')
+            break
+    for i in range(len(elements)):
+        if elements[i].text.split(' ')[0] == 'Show':
+            month_data['result1'] = elements[i].text.split(' ')[1]
+            elements = driver.find_elements(By.XPATH, './/span[@class="a-size-small a-color-base"]')
+            break
+data.append(month_data)
 print(data)
