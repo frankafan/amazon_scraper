@@ -14,17 +14,18 @@ driver.get('https://www.amazon.com/s?i=stripbooks&rh=n%3A5%2Cp_n_condition-type%
 
 data = []
 
-for element1 in driver.find_elements(By.XPATH, './/span[@class="a-size-small a-color-base"]'):
-    print(1)
-    if element1.text == 'Filters':
+elements = driver.find_elements(By.XPATH, './/span[@class="a-size-small a-color-base"]')
+for i in range(len(elements)):
+    if elements[i].text == 'Filters':
         driver.implicitly_wait(1)
-        element1.click()
-        for element2 in driver.find_elements(By.XPATH, './/span[@class="a-size-small a-color-base"]'):
-            if element2.text.split(' ')[0] == 'Show':
-                data.append({
-                    'results1': element2.text.split(' ')[1],
-                })
-                print(driver.page_source)
-                break
+        elements[i].click()
+        elements = driver.find_elements(By.XPATH, './/span[@class="a-size-small a-color-base"]')
+        break
+for i in range(len(elements)):
+    if elements[i].text.split(' ')[0] == 'Show':
+        data.append({
+            'results1': elements[i].text.split(' ')[1],
+        })
+        print(driver.page_source)
         break
 print(data)
