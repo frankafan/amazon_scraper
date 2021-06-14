@@ -15,3 +15,5 @@ for year in range(START_YEAR, END_YEAR + 1):
 
 with open('data.txt', 'w') as outfile:
     json.dump(books, outfile)
+
+print(f'{len(books)} books scraped')
