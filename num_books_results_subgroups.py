@@ -28,6 +28,27 @@ def click_filter_button(elements):
             elements = find_filter_items(driver)
 
 
+categories = [
+    'Business Technology',
+    'Certification',
+    'Computer Science',
+    'Databases & Big Data',
+    'Digital Audio, Video & Photography',
+    'Games & Strategy Guides',
+    'Graphics & Design',
+    'Hardware & DIY',
+    'History & Culture',
+    'Internet & Social Media',
+    'Mobile Phones, Tablets & E-Readers',
+    'Networking & Cloud Computing',
+    'Operating Systems',
+    'Programming',
+    'Programming Languages',
+    'Security & Encryption',
+    'Software',
+    'Web Development & Design',
+]
+
 data = []
 
 START_YEAR = 2017
