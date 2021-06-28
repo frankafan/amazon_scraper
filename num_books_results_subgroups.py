@@ -69,7 +69,7 @@ for year in range(START_YEAR, END_YEAR + 1):
                     click_filter_button(elements)
                     elements = find_filter_items(driver)
                     month_data['All'] = find_num_results(elements)
-                    print(f'All: {month_data["All"]}')
+                print(f'All: {month_data["All"]}')
 
                 available_subcategories = []
                 while len(available_subcategories) == 0:
@@ -89,8 +89,11 @@ for year in range(START_YEAR, END_YEAR + 1):
                         click_filter_button(elements)
                         elements = find_filter_items(driver)
                         for i in range(len(elements)):
+                            category_index = 0
+                            if elements[i].text == 'Computers & Technology':
+                                category_index = i
                             if elements[i].text == subcategory:
-                                driver.execute_script("arguments[0].scrollIntoView(true);", elements[0])
+                                driver.execute_script("arguments[0].scrollIntoView(true);", elements[category_index])
                                 elements[i].click()
                                 driver.refresh()
                                 elements = find_filter_items(driver)
