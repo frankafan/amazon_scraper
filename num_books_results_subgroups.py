@@ -111,6 +111,6 @@ for year in range(START_YEAR, END_YEAR + 1):
             else:
                 print(month_data)
                 break
-# print(data)
-# with open(f'num_results.txt', 'w') as outfile:
-#     json.dump(data, outfile)
+print(data)
+with open(f'num_results.txt', 'w') as outfile:
+    json.dump(data, outfile)
